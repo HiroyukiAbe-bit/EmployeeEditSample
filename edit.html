@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <!-- vue.js -->
+    <script src="https://unpkg.com/vue"></script>
+
+    <!--element ui -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/element-ui/2.0.0/theme-chalk/index.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/element-ui/2.0.0/index.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/element-ui/2.0.0/locale/ja.js"></script>
+
+    <!-- bootstrap -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    
+    <!-- fontawsome -->
+    <link rel ="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.css">
+    <style>
+      .retirement {
+        color: #878d99
+      }
+      .key-update {
+        color: #fa5555;
+      }
+      .update {
+        color: #409EFF;
+      }
+      .el-form-item.is-success .el-input__inner {
+        border-color: #b4bccc;
+      }
+      .el-message--error {
+        width: 600px;
+      }
+      .text-muted {
+        font-size: 0.8rem;
+      }
+      .required {
+        color: red;
+        font-size: 0.8rem;
+      }
+      .dialog-footer {
+        text-align: left;
+      }
+      .card {
+        transform: translateY(30px);
+        margin: 2em auto;
+        padding: 2em;
+        width: 90%;
+        border: 1px solid #ccc; /* 枠線 */
+        background-color: #fff; /* 背景色 */
+        box-shadow: 1px 1px 2px #ccc;
+        min-width: 745px;
+        max-width: 800px;
+      }
+      .title {      
+        padding: 0.4em 0.5em;/*文字の上下 左右の余白*/
+        color: #494949;/*文字色*/
+        background: #f4f4f4;/*背景色*/
+        border-left: solid 5px #7db4e6;/*左線*/
+        border-bottom: solid 3px #d7d7d7;/*下線*/
+        margin-bottom: 20px;
+        max-width: 200px;
+        min-width: 180px;
+        vertical-align: middle;
+        text-align: left;
+        margin-right: 15px;
+      }
+      .rows-title {
+        padding: 1.0em 0.5em;/*文字の上下 左右の余白*/
+      }
+      #page_title {
+        position: relative;
+        display: inline-block;
+        padding: 0 55px;
+      }
+      #page_title:before, #page_title:after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        display: inline-block;
+        width: 45px;
+        height: 2px;
+        border-top: solid 1px black;
+        border-bottom: solid 1px black;
+      }
+      #page_title:before {
+        left:0;
+      }
+      #page_title:after {
+        right: 0;
+      }
+      .password_forms {
+        width: 100%;
+      }
+      .rows_forms, .forms {
+        min-width: 450px;
+        max-width: 500px;
+        height:40px;
+      }
+      /* .forms {
+        width: 100%;
+        height: 40px;
+        max-width: 500px;
+      } */
+      .button_area {
+        margin-top: 10px;
+        margin-bottom: 5px
+      }
+      .btn-size {
+        width: 140px;
+        height: 50px;
+      }
+      .el-dialog {
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        position: fixed;
+        margin: auto;
+        margin-top: auto;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app" class="container-fluid">
+      <div class="row">
+        <div class="offset-1 col-10">
+          <main class="card mb-5">
+            <el-form :model="editForm" :rules="rules" ref="editForm">
+              <article class="card-body">
+                <section>
+                  <div class="d-flex justify-content-center">
+                    <div id="page_title">
+                      <h2>社員情報編集</h2>
+                    </div>
+                  </div>
+                  <!-- 説明文エリア -->
+                  <section>
+                    <ul class="list-unstyled">
+                      <li>
+                        <i class="fas fa-user-edit update"></i>&nbsp;<span class="text-muted">社員情報を更新するには「<b class="update">更新</b>」ボタンを押してください</span>
+                      </li>
+                      <li>
+                        <i class="fas fa-key key-update"></i>&nbsp;<span class="text-muted">パスワードを更新するには「<b class="key-update">パスワード更新</b>」ボタンを押してください</span>
+                      </li>
+                      <li>
+                        <i class="fas fa-skull-crossbones retirement"></i>&nbsp;&nbsp;<span class="text-muted">社員が退職した場合は「<b class="retirement">退職登録</b>」ボタンを押してください</span>
+                      </li> 
+                    </ul>
+                    <p>
+                      
+                    </p>
+                      
+                  </section>
+                  <!-- 説明文エリア終了 -->
+                  <!-- フォームエリア -->
+                  <div class="d-flex flex-row">
+                    <div class="title">ユーザーID</div>
+                    <div class="p-2 forms">
+                      ACS_100000
+                    </div>
+                  </div>
+                  <div class="d-flex flex-row">
+                    <div class="title">
+                      <div class="d-flex justify-content-between align-items-end">
+                        <span>
+                          氏名
+                        </span>
+                        <span class="required">
+                          ※必須
+                        </span>
+                      </div>
+                    </div>
+                    <div class="forms">
+                      <el-form-item prop="employeeName">
+                        <el-input name="employee_name" type="text" placeholder="氏名" v-model="editForm.employeeName" /></el-input>
+                      </el-form-item>
+                    </div>
+                  </div>
+                  <div class="d-flex flex-row">
+                    <div class="title">
+                      <div class="d-flex justify-content-between align-items-end">
+                        <span>
+                          フリガナ
+                        </span>
+                        <span class="required">
+                          ※必須
+                        </span>
+                      </div>
+                    </div>
+                    <div class="d-flex flex-column">
+                      <div class="rows_forms">
+                        <el-form-item prop="employeeKana">
+                          <el-input name="employee_kana" type="text" placeholder="氏名" v-model="editForm.employeeKana" /></el-input>
+                        </el-form-item>
+                      </div>
+                      <!-- <div class="text-muted">※必ずカタカナで入力してください</div> -->
+                    </div>
+                  </div>
+                  <div class="d-flex flex-row">
+                    <div class="title">性別</div>
+                    <div class="forms">
+                      <div class="p-2">
+                        <el-radio v-model="editForm.sex" label="1">男</el-radio>
+                        <el-radio v-model="editForm.sex" label="2">女</el-radio>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="d-flex flex-row">
+                    <div class="title">E-Mail</div>
+                    <div class="forms">
+                      <el-form-item prop="email">
+                        <el-input name="e_mail" type="text" placeholder="E-mail" v-model="editForm.email" /></el-input>
+                      </el-form-item>
+                    </div>
+                  </div>
+                  <div class="d-flex flex-row">
+                    <div class="title">入社日</div>
+                    <div class="forms">
+                      <el-form-item>
+                        <el-date-picker
+                        id="hire_date"
+                        v-model="editForm.hiraDate"
+                        type="date"
+                        name="hire_date"
+                        placeholder="入社日">
+                        </el-date-picker>
+                      </el-form-item>
+                    </div>
+                  </div>
+                  <div class="d-flex flex-row">
+                    <div class="title">誕生日</div>
+                    <div class="forms">
+                      <el-form-item>
+                        <el-date-picker
+                        id="birth_date"
+                        v-model="editForm.birthDate"
+                        type="date"
+                        name="birth_date"
+                        placeholder="誕生日">
+                        </el-date-picker>
+                      </el-form-item>
+                    </div>
+                  </div>
+                  <div class="d-flex flex-row">
+                    <div class="title">
+                      郵便番号
+                    </div>
+                    <div class="d-flex flex-column">
+                      <div class="rows_forms">
+                        <el-form-item prop="postalCode">
+                          <el-input name="postal_code" type="text" placeholder="郵便番号" v-model="editForm.postalCode" /></el-input>
+                        </el-form-item>
+                      </div>
+                      <!-- <div class="text-muted">※郵便番号は「-」を含めて入力してください</div> -->
+                    </div>
+                  </div>
+                  <div class="d-flex flex-row">
+                    <div class="title">住所</div>
+                    <div class="forms">
+                      <el-form-item>
+                        <el-input name="street_address" type="text" placeholder="住所" v-model="editForm.streetAdress" /></el-input>
+                      </el-form-item>
+                    </div>
+                  </div>
+                  <div class="d-flex flex-row">
+                    <div class="title">建物名/号室</div>
+                    <div class="forms">
+                      <el-form-item>
+                        <el-input name="form" type="text" placeholder="建物名/部屋番号" v-model="editForm.form" /></el-input>
+                      </el-form-item>
+                    </div>
+                  </div>
+                  <div class="d-flex flex-row">
+                    <div class="title">出身地</div>
+                    <div class="forms">
+                      <el-form-item>
+                        <el-input name="birth_place" type="text" placeholder="出身地" v-model="editForm.birthPlace" /></el-input>
+                      </el-form-item>
+                    </div>
+                  </div>
+                  <div class="d-flex flex-row">
+                    <div class="title">
+                      <div class="d-flex justify-content-between align-items-end">
+                        <span>
+                          携帯電話番号
+                        </span>
+                        <span class="required">
+                          ※必須
+                        </span>
+                      </div>
+                    </div>
+                    <div class="d-flex flex-column">
+                      <div class="rows_forms">
+                        <el-form-item prop="mobileNumber">
+                          <el-input name="mobile_phone_no" type="text" placeholder="携帯電話番号" v-model="editForm.mobileNumber" /></el-input>
+                        </el-form-item>
+                      </div>
+                      <!-- <div class="text-muted">※携帯電話番号は「-」を含めて入力してください</div> -->
+                    </div>
+                  </div>
+                  <div class="d-flex flex-row">
+                    <div class="title">
+                      <span>
+                        自宅電話番号
+                      </span>
+                    </div>
+                    <div class="d-flex flex-column">
+                      <div class="rows_forms">
+                        <el-form-item prop="homeNumber">
+                          <el-input name="home_phone_no" type="text" placeholder="自宅電話番号" v-model="editForm.homeNumber" /></el-input>
+                        </el-form-item>
+                      </div>
+                      <!-- <div class="text-muted">※自宅電話番号は「-」を含めて入力してください</div> -->
+                    </div>
+                  </div>
+                  <div class="d-flex flex-row">
+                    <div class="title">最終学歴</div>
+                    <div class="forms">
+                      <el-form-item>
+                      <el-input name="final_education" type="text" placeholder="最終学歴" v-model="editForm.finalEducation" /></el-input>
+                      </el-form-item>
+                    </div>
+                  </div>
+                  <div class="d-flex flex-row">
+                    <div class="title">最終学歴卒業年月日</div>
+                    <div class="forms">
+                      <el-form-item>
+                        <el-date-picker
+                        id="final_education_graduate_date"
+                        v-model="editForm.finalEducationDate"
+                        type="date"
+                        name="final_education_graduate_date"
+                        placeholder="最終学歴卒業年月日">
+                        </el-date-picker>
+                      </el-form-item>
+                    </div>
+                  </div>
+                  <div class="d-flex flex-row">
+                    <div class="title">経験年数</div>
+                    <div class="forms">
+                      <el-form-item>
+                        <el-input-number v-model="editForm.yearsOfExperience" name="years_of_experience" controls-position="right" :precision="1" :step="0.5" :min="0" :max="30"></el-input-number>
+                      </el-form-item>
+                    </div>
+                  </div>
+
+              </section>
+              <!-- フォームエリア終了 -->
+              <!-- ボタンエリア -->
+              <section class="button_area d-flex flex-row">
+                <el-button class="btn-size" type="primary" @click="updateEmployee()">更新</el-button>
+                <el-button class="btn-size" type="danger" @click="outerVisible = true">パスワード変更</el-button>
+                <el-button class="btn-size ml-auto" type="info" @click="retirementVisible = true">退職登録</el-button>
+              </section>
+              <!-- ボタンエリア終了 -->
+              <!-- パスワード変更ダイアログエリア -->
+              <el-dialog title="新しいパスワードを入力してください" top="0" append-to-body :visible.sync="outerVisible">
+                <div class="d-flex flex-row">
+                  <div class="title">パスワード変更</div>
+                  <div class="password_forms">
+                    <el-form-item>
+                      <el-input name="login_pass" type="password" placeholder="パスワード" v-model="editForm.password" /></el-input>
+                    </el-form-item>
+                  </div>
+                </div>
+                <div class="d-flex flex-row">
+                  <div class="title">パスワード確認</div>
+                  <div class="password_forms">
+                    <el-form-item>
+                      <el-input name="login_pass_confirm" type="password" :disabled="isPass" placeholder="パスワード確認" v-model="editForm.confirmPass" /></el-input>
+                    </el-form-item>
+                  </div>
+                </div>
+                <el-dialog
+                title="パスワードの不一致"
+                top="0"
+                :visible.sync="innerVisible"
+                append-to-body>
+                  <span>入力されたパスワードが異なります。</span>
+                  <p>再度入力し直してください。</p>
+                  <el-button type="primary" :disabled="isPass" @click="innerVisible = false">OK</el-button>
+                </el-dialog>
+                <div slot="footer" class="dialog-footer">
+                  <el-button type="primary" :disabled="isPass" @click="passwordChange()">パスワードを更新する</el-button>
+                  <el-button @click="outerVisible = false">キャンセル</el-button>
+                </div>
+              </el-dialog>
+              <!-- パスワード変更ダイアログエリア終了 -->
+              <!-- 退職登録ダイアログ -->
+              <el-dialog title="退職社員で間違いないですか？" top="0" append-to-body :visible.sync="
+              retirementVisible">
+                <p>※退職登録した後は、戻すことができません。</p>
+                <el-button type="danger" @click="
+                retirementUpdate()">退職登録する</el-button>
+              </el-dialog>
+              <!-- 退職登録ダイアログ終了 -->
+            </article>
+          </el-form>
+          </main>
+        </div>
+      </div>
+    </div>
+  </body>
+    <script>
+        ELEMENT.locale(ELEMENT.lang.ja)
+        var list = new Vue({
+            el: '#app',
+            data: {
+              items: [],
+              editForm: {
+                password: '',
+                confirmPass: '',
+                employeeName: '山田太郎',
+                employeeKana: 'ヤマダタロウ',
+                hiraDate: null,
+                birthDate: null,
+                postalCode: '',
+                streetAdress: '',
+                form: '',
+                mobileNumber: '',
+                homeNumber: '',
+                email: '',
+                sex: '1',
+                finalEducation: '',
+                finalEducationDate: null,
+                yearsOfExperience: 0
+              },
+              outerVisible: false,
+              innerVisible: false,
+              retirementVisible: false,
+              rules: {
+                employeeName: { required: true, message: "氏名は必ず入力してください", trigger: "blur" },
+                employeeKana: [
+                  { required: true, message: "フリガナは必ず入力してください", trigger: "blur" },
+                  { pattern: /^[ァ-ヶー　]+$/, message: "全角カタカナで入力してください", trigger: "blur" },
+                ],
+                email: { type: "email", message: "メールアドレス形式で入力してください。", trigger: "blur" },
+                postalCode: { pattern: /^[0-9]{3}-[0-9]{4}$/, message: "正しい形式で入力してください。　例）123-4567", trigger: "blur"},
+                mobileNumber: [
+                  { required: true, message: "携帯電話番号は必ず入力してください", trigger: "blur" },
+                  { pattern: /^[-0-9]*$/, message: "正しい形式で入力してください。　例）123-4567-8910", trigger: "blur"},
+                ],
+                homeNumber: { pattern: /^[-0-9]*$/, message: "正しい形式で入力してください。　例）1234-56-7890", trigger: "blur"},
+              },
+            },
+            computed: {
+              isPass() {
+                if(this.editForm.password.length > 0) {
+                  return false
+                } else {
+                  return true
+                }
+              }
+            },
+            methods: {
+              updateEmployee() {
+                this.$refs['editForm'].validate((valid) => {
+                  if (valid) {
+                    alert('更新処理をする')
+                  } else {
+                    // 処理完了通知
+                    this.$message({
+                      message: "入力内容が正しくない項目があります、赤色のエラー部分をご確認ください。",
+                      type: "error",
+                      duration: 3000,
+                      showClose: true
+                    });
+                    console.log('error submit!!');
+                    return;
+                  }
+                });
+              },
+              passwordChange() {
+                if(this.editForm.password !== this.editForm.confirmPass) {
+                  this.innerVisible = true
+                } else {
+                  alert('パスワードの更新APIが走る')
+                }
+              },
+              retirementUpdate() {
+                alert('退職日の書き込みAPIが走る')
+                this.retirementVisible = false
+              }
+            }
+        })
+    </script>
+    
+</html>
